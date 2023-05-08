@@ -1,0 +1,804 @@
+\documentclass[10pt]{article}
+\usepackage{fullpage,amsmath,amssymb,siunitx,mathtools,setspace,caption,subcaption,hyperref,indentfirst,bm,physics,verbatim,cancel}
+
+\doublespacing
+\setlength\parindent{24pt}
+\AtBeginDocument{\RenewCommandCopy\qty\SI}
+
+\begin{document}
+
+\def\rcurs{{\mbox{$\resizebox{.16in}{.08in}{\includegraphics{griffiths_r/ScriptR.pdf}}$}}}
+
+\title{The Physics of Satellite Internet: Formation of a New Artificial Constellation}
+\author{Ben Turner}
+
+\maketitle
+
+\begin{abstract}
+
+The Internet has been the crux of the modern century, but over $30\%$ of the world still does not have the connectivity that many take for granted. Where cable installation is impossible due to lack of infrastructure, satellite internet like Starlink provides fast connection to isolated users. To achieve this, data is transferred via electromagnetic waves to orbiting satellites, which relay it back to a ground station to connect it with the rest of the world. The physics behind each step is explained and then applied in the context of the satellite system Starlink.
+
+\end{abstract}
+
+\pagebreak
+
+\tableofcontents
+
+\pagebreak
+
+%--INTRODUCTION--%
+\section{Introduction to Communication}
+\label{intro}
+
+The evolution of long distance human communication has seen astounding advancements in the last few centuries. Prior to the 19th century, long distance communication had progressed from visual and aural tactics such as signal flags, smoke, and drums, to physical mail with the development of roads and trade routes. Each of these systems were limited by either latency, the time delay between when the information was sent to when a response was received back, or the physical range that a system could span. With the invention of electricity came the first transcontinental submarine communications cable. It was laid in the Atlantic Ocean as seen in Fig. \ref{fig:telegraph_cable}. While it may seem primitive today, this transatlantic cable was a massive step in technological globalization. Along with it came telegraphs in $1837$, telephones in $1854$, radios in $1895$, and televisions in $1927$. While ranged communication had always been possible with ships and manpower, electricity and submarine cables drastically decreased latency from months to minutes and eventually minutes to second. Although humans had long been able to travel large distances to deliver information, doing so in a near-instantaneous manner made all the difference.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=5.0 in]{figures/telegraph.jpeg}
+\caption{Submarine Telegraph. The first transatlantic communications cable for the telegraph ran from North America to Europe.\cite{Griffiths_CNN}}
+\label{fig:telegraph_cable}
+\end{figure}
+
+\subsection{The Internet}
+\label{internet_intro}
+
+In $1983$ came the Internet. Since it was such a complex system, it took over around $30$ years for the entire system to develop into what we consider it to be. At its basics, the Internet is just a lot of interconnected computers, big and small, transferring information amongst each other\cite{Internet_Basics}. This data transfer required immense investments to create the infrastructure necessary to connect not just communities but the world. This involved adapting and creating more transcontinental submarine communications cables to transfer internet traffic as seen in Fig. \ref{fig:internet_cables}. 
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=5.0 in]{figures/internet_cables_world.png}
+\caption{A map of all the submarine communications cables that exist in the world as of January $2023$. Each provide a vital connection that allow the Internet and data communication to flow between countries despite separation due to water. The perhaps surprising number of cables is to ensure consistent connection between countries, despite damage to other cables. It also allows for more bandwidth (transmit more data at a time), especially as the Internet continues to grow\cite{Submarine_Cable_Map}.}
+\label{fig:internet_cables}
+\end{figure}
+
+Due to the speed, range, accuracy, and ease of the system, the Internet boomed. It provided a platform that created a new age in media and entertainment, education, finances, retail, and most importantly the transfer of knowledge through education and telecommunications. An age of instantaneous knowledge from anywhere. Nowadays someone can sit on a couch in the USA and play live player-versus-player video games with someone else who is over $6000$ miles in Japan. As of $2021$, $63\%$ of the world is connected to the Internet, with $57\%$ of developing countries and $90\%$ of developed countries having access\cite{internet_usage}\cite{Global_internet_2022}. While this growing interconnectivity is incredible and continues to expand rapidly, some areas of the world are difficult or too expensive to reach via cables. A solution to this was to find an alternative to the cable connections for those areas. For this many looked to the stars, or in this case, the satellites. 
+
+\subsection{Satellite Internet}
+\label{satellite_intro}
+Satellites are celestial bodies orbiting another of a larger size. Defined as so, natural satellites exist such as planets around the Sun, meteoroids around planets, and even the Moon around Earth. However, the most commonly referred to satellites are man-made. These artificial satellites, seen in Fig. \ref{fig:satellites} are machines placed in orbits to obtain or transfer information out from or into hard to reach places.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=5.0 in]{figures/all_satellites.png}
+\caption{Screen shot of orbital data compiled in Astria Graph. Visuals of all known or trackable satellites and debris in orbit around Earth as of January $2023$, regardless of their activity status. Data is acquired from multiple vetted sources, combined together to calculate trajectory, and plotted to show satellite positions over time. Pink is uncategorized objects, orange refers to active satellites, while light blue are those that are inactive\cite{Astria_Graph}.}
+\label{fig:satellites}
+\end{figure}
+
+Satellites are used for a multitude of important tasks. In fact, as of January $2022$ there were over $8000$ satellites in orbit, with almost $60\%$ of them being active\cite{Mohanta_2022}. This sheer number can be seen in Fig. \ref{fig:satellites} as we can barely see Earth as it is swarmed by satellites. Although other systems are extremely useful, we will focus on the use of satellites for internet purposes. Many isolated regions of the world cannot get wired internet such as fiber-optic, coaxial, digital subscriber line, dial up, or mobile internet. Even areas that can get some form of these wired connections may experience slow speeds and high-latency, which severely limits some activities such as streaming, video chats, and video games\cite{Satellite_internet_latency_2021}.
+
+Although Zoom calls for online school can be exhilarating, more serious internet users may be fighting for a top rank in a live multiplayer game such as Brawl Stars seen in Fig. \ref{fig:brawlstars}\footnote{an online multiplayer mobile game that can be played by anyone with a smartphone and an internet connection}. Players might connect from a location like the United States, usually matching up against players in the North American region on a Supercell server hosted nearby.\footnote{Supercell is the mobile game development company that developed Brawl Stars. It is also owns other popular games such as Hay Day, Clash of Clans, and Clash Royale.}\footnote{A server is a specialized and powerful computer or group of computers that store data to be used for a particular purpose such as YouTube, Brawl Stars, or even Carleton websites} However, they might even go up against players across the globe in Japan.\footnote{Japan is actually the most competitive country for competitive Brawl Stars, with top Japanese players collectively earning almost $\$1.3$ million from tournaments\cite{brawl_countries}.} This almost instantaneous cross-globe connection is incredible and complex. Current satellite internet does not replace the maze of connected cables in Fig. \ref{fig:internet_cables} that span continents and oceans. Instead, it provides an alternative to areas that cable cannot reach.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=5.0 in]{figures/brawl_stars.PNG}
+\caption{A screenshot of Brawl Stars gameplay in the game mode knockout.}
+\label{fig:brawlstars}
+\end{figure}
+
+I will follow along with the Brawl Stars data travelling from the user to its destination. I will first explain this journey in Section \ref{satellite_internet} with traditional satellite internet systems. I will then apply these traditional concepts to the specific case of the Starlink constellation in Section \ref{starlink} and its relative merits from multiple perspectives.
+
+%--NORMAL SATELLITES--%
+\section{Satellite Internet Systems}
+\label{satellite_internet}
+
+Our journey starts with a user and a device such as an iPhone. This player boots up their online video game, which requests data from the company's server. The device uses a Wi-Fi network generated by a router to connect with the satellite modem to get the user's data.\footnote{For general internet, a modem takes information from the pre-existing internet infrastructure (such as cable internet) and translates it for use with personal devices. A router then takes this converted signal and creates a local Wi-Fi network that transmits the data to local devices.}\cite{router_modem} The modem then converts the requested data from the router into a signal that it can send to orbiting satellites via an antenna.\footnote{Some providers combine the router and modem (sometimes even the satellite) into hardware that does everything that is needed. However, the necessary steps to get from a user's device to a signal sent to the satellite is the same.} This combination of components called the user terminal is used to connect a user with the satellite, which in turn connects the user with the Internet as seen in Fig. \ref{fig:user_terminal}. The general purpose of the user terminal is to send and receive information, such as the data required to sign on to Brawl Stars. Next, I will discuss what the signal actually is and how we use the antenna to generate and transmit it to orbiting satellites.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=5.0 in]{figures/user_terminal schematic.png}
+\caption{A schematic overview of the satellite internet system. The user terminal is consists of a device, a router (Wi-Fi access point), a modem (sometimes combined with router), and an antenna to convert the data to electromagnetic waves. This information is then relayed through an orbiting satellite to a ground station that connects the user to the rest of the Internet.}
+\label{fig:user_terminal}
+\end{figure}
+
+\subsection{The Signal}
+\label{signal}
+
+A signal in telecommunications is the information transmitted between two distant points\cite{dunlop2017telecommunications}. The information sent during a Brawl Stars game includes connection requests, game state updates, input commands, chat messages, and more. This information is stored as bytes, which can be modulated onto an electromagnetic carrier wave.\footnote{Bytes are the units of computer information or data-storage capacity which consist of eight bits and is primarily used to represent alphanumeric characters.} Although the signal changes throughout the process, we care about the information being sent on the signal. The transmission of waves can be either guided or unguided. With a localized source, the nature of waves is to spread out in all directions from a single point or line, depending on the source shape or material. A guided electromagnetic wave is contained within waveguides, which are mediums such as fiber-optic cables, coaxial cables, and even just hollow metal tubes. With a traditional wired internet system, these waveguides direct the signal from your home to a local ISP (Internet Service Provider), which is in turn connects to the rest of the world as seen in Section \ref{internet_intro}. Although guided waves are important, for satellite systems, we generally deal with waves that are free to propagate in any direction. These unguided electromagnetic waves propagate through the air to some point in space given by $\vec{r}$ over time given by $t$. They consist of electric $\vec{E}$ and magnetic $\vec{B}$ fields that oscillate perpendicular to each other and the direction of propagation $\vec{k}$, as seen in Fig. \ref{fig:em_wave}. These are also represented mathematically as
+\begin{equation}
+\vec{E}(\vec{r}, t) = E_0 \cos (\vec{k}\cdot \vec{r} + \omega t + \phi_0) \hat{E}
+    \label{eq:electric_field}
+\end{equation}
+and
+\begin{equation}
+\vec{B}(\vec{r}, t) = B_0 \cos (\vec{k}\cdot \vec{r} + \omega t + \phi_0) \hat{B},
+    \label{eq:magnetic_field}
+\end{equation}
+where the fields both have a phase $\phi_0$ and an angular frequency $\omega$, while each have their own amplitudes $E_0$ and $B_0$ with directions $\hat{E}$ and $\hat{B}$ respectively. Since we ultimately will be dealing with a mix of spherical and directional waves, Appendix \ref{appen_coord} will help understand angle terminology and when certain coordinate systems may be used. It is within $E_0,B_0,\omega,\phi_0$ of the fields that we can encode our information using signal modulation.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=5.0 in]{figures/em_wave.png}
+\caption{A graphical representation of electromagnetic wave. An electromagnetic wave propagating through space in the $\hat{z}$ direction at the speed of light $c$. Both the electric field $\vec{E}$ (in the $\hat{x}$ direction) and the magnetic field $\vec{B}$ (in the $\hat{y}$ direction) are oscillating perpendicular to each other and the direction of propagation. The amplitude of the electric field is given as $E_0$, while the amplitude of the magnetic field is in terms of the $E_0$ and $c$\cite{griffiths_2019}.}
+\label{fig:em_wave}
+\end{figure}
+
+\subsubsection{Signal Modulation}
+\label{modulation}
+
+The basic idea of modulation is taking a carrier wave and altering its properties by combining it with a signal that represents our data.\footnote{We are modulating both the electric and magnetic fields, but for simplicity we are just focusing on $\vec{E}$. Swapping in $\vec{B}$ for $\vec{E}$ would give us the result of the modulation for $\vec{B}$.} As seen in Fig. \ref{fig:modulation_types}, modulation takes on many forms depending on the type of carrier wave and signal. To get an grasp of modulation, we will focus on amplitude modulation as seen in Fig. \ref{fig:am}. We will then explore the frequency-shift-keying modulation scheme seen in Fig. \ref{fig:wave_modulation}, which is commonly used for internet communications. This type of modulation involves create a digit signal from binary digits (bits) and combine that with an analog carrier wave to get a modulated carrier wave, which is our electric field.\footnote{This modulated carrier wave is usually encoded and decoded using modulation circuitry. This is a really important aspect of telecommunication and electronics that deserves more attention here than a simple footnote\cite{schure1955amplitude}\cite{schure1955frequency}.} To get a sense of modulation we can look at amplitude modulation (AM), the simplest case where our signal and carrier wave are both analog. 
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=5.0 in]{figures/Modulation_categorization.png}
+\caption{An tree of the types of modulation depending on whether the carrier wave and signal are analog or digital. There are many different types that have their strengths and weaknesses, but they are all just forms of encoding data in signals\cite{mod_types}.}
+\label{fig:modulation_types}
+\end{figure}
+
+For satellite communications, the carrier wave is the electric field from Eq. \ref{eq:electric_field}. In general, we can modulate either its amplitude $E_0$, frequency $f$, or phase $\phi_c$ such that $E_0\rightarrow E_0(t)$, $f\rightarrow f(t)$, or $\phi_c\rightarrow \phi_c(t)$.\footnote{A well known application of amplitude and frequency modulation is AM and FM radio, which commonly use their respective types of modulation to send music to listeners via radio waves.} Therefore, if we assume $\phi_0 = 0$ then the modulated carrier wave $v_c(t)$ is
+\begin{equation}
+v_c(t) = E_0(t) \cos (\vec{k}\cdot \vec{r} + 2\pi f_c t) \hat{E},
+    \label{eq:mod_field}
+\end{equation}
+where we have applied the relation $\omega = 2\pi f$ to represent our wave in terms of carrier frequency $f_c$.  The amplitude of a modulated carrier wave is given by
+\begin{equation}
+E_0(t) = E_0 + v_m(t),
+    \label{eq:mod_amp}
+\end{equation}
+where $E_0$ is the unmodulated carrier amplitude and $v_m(t)$ is the modulating signal (or message) given by
+\begin{equation}
+v_m(t) = a\cos(2\pi f_m t),
+    \label{eq:mod_signal}
+\end{equation}
+where the modulating signal has an amplitude $a$ and a frequency $f_m$. By plugging in Eq. \ref{eq:mod_amp} and Eq. \ref{eq:mod_signal} into Eq. \ref{eq:mod_field}, we get
+\begin{equation}
+v_c(t) = [E_0 + a\cos(2\pi f_m t)] \cos (\vec{k}\cdot \vec{r} + 2\pi f_c t) \hat{E}.
+    \label{eq:mod_carrier1}
+\end{equation}
+We can factor out $E_0$ by defining the depth of modulation $m$ as
+\begin{equation}
+m = \frac{\text{modulating signal amplitude}}{\text{unmodulated carrier amplitude}} = \frac{a}{E_0},
+    \label{eq:m}
+\end{equation}
+which gives us
+\begin{equation}
+v_c(t) = E_0[1 + m\cos(2\pi f_m t)] \cos (\vec{k}\cdot \vec{r} + 2\pi f_c t) \hat{E},
+    \label{eq:mod_carrier2}
+\end{equation}
+which we expand to
+\begin{equation}
+v_c(t) = E_0[\cos(\vec{k}\cdot \vec{r} + 2\pi f_c t)+\frac{m}{2}\cos\{2\pi (f_c-f_m) t\}+\frac{m}{2}\cos\{2\pi (f_c+f_m) t\}].
+    \label{eq:mod_carrier3}
+\end{equation}
+We can see the last two terms contain our information and are dictated by $f_m$ and have strength determined by $m$. This means the modulated carrier wave becomes like in Fig. \ref{fig:am}, where the message $v_m(t)$ is a carrier envelope. 
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=5.0 in]{figures/am.png}
+\caption{The result of amplitude modulation. The modulating signal $v_m(t)$ is both on its own and an carrier envelope for the modulated carrier $v_c(t)$. We can measure the modulated carrier at the modulation frequency $f_c$ to get the original information\cite{dunlop2017telecommunications}.}
+\label{fig:am}
+\end{figure}
+
+We can measure our modulated carrier wave at the carrier frequency $f_c$ to get the expanding and contracting signal seen in Fig. \ref{fig:am}. To demodulate, we just measure that change in amplitude. To interpret our result further, when $m = 0$ then we have not added any modulating signal and therefore $E_0(t) = E_0$. We can also see in Eq. \ref{eq:mod_carrier3}, when $m>1$ then the modulating terms with $f_m$ overpower the carrier wave. This means the modulation no longer resembles its modulating signal and therefore the received signal will be distorted and unreadable. Therefore, we want $m << 1$ so that we remain in the linear regime, making it easier to demodulate the signal and recover the information put on the carrier. While amplitude modulation involves both an analog carrier wave and an analog modulation signal, internet data transmission involves bits, which translate to a digital modulation signal. Therefore, rather than amplitude modulation, traditional satellite internet systems use a modulation technique of shift keying. In particular, they use frequency-shift keying (FSK) seen in Fig. \ref{fig:wave_modulation} due to several advantages of frequency modulation over amplitude modulation.\footnote{Some advantages of frequency modulation are improved signal to noise ratio, smaller geographical interference between neighboring stations, and well defined service areas for given transmitter power.} With FSK, two different frequencies are used to represent the $0$ and $1$ states of a bit. The signal will be a wave changing between those two frequencies, where every new wavelength chunk represents a new bit in the sequence.
+
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=5.0 in]{figures/signal-modulation-methods-binary-digits-amplitudes-seriesv1.jpeg}
+\caption{An illustration of how frequency-shift keying (FSK) modulation is used to store binary digits within a carrier wave. In FSK a higher frequency indicates a $1$ bit and lower represents $0$. Each bit is represented within a single period of the carrier wave\cite{modulation_image}.}
+\label{fig:wave_modulation}
+\end{figure}
+
+\subsubsection{Frequency Bands}
+\label{band}
+
+Despite achieving modulation, the sheer number of signals from various sources, including but not limited to satellite telecommunications, will make it hard for our satellite to isolate our particular wave and corresponding data. To make our wave distinct from other telecommunication traffic, we want to define a specific carrier frequency $f_c$ as an identification method for our system, no matter the type of modulation we use. We also define multiple bands of frequencies each around a unique frequency. Only our system should operate within these bands so that our satellites will only pick up our signals. We can split these larger bands into smaller sections called channels, which we can use in parallel.\footnote{Although all channels of a band are under the same system, we separate them to deal with multiple signals simultaneously. To keep user data distinct requires two unique channels, an up-link and down-link, to transmit and receive their data.} The size of these channels depends on the size (or bandwidth) of the signal. Satellite companies must then ask the Federal Communications Commission for allocated frequency channels within which they can send their own signals. The commonly used ranges of frequencies are called the frequency bands. The larger a frequency band, the more channels a company can use to send signals simultaneously without having them interfere with each other. More channels means more data transfer. This is important for commercial companies as they want to transfer as much data as possible as fast as possible. \footnote{It is useful to note that we cannot encode the carrier wave faster than its frequency, which can be shown by Fourier analysis. In other words, the maximum rate of information we can transmit in a carrier wave is equal to the frequency of that wave. This is why we gain more speed by allocating more channels. This also means that the higher the frequency of a carrier wave, the faster we can transmit information. However, the higher the frequency, the more likely it becomes for the signal to be absorbed in transit by some part of the atmosphere. This attenuation issue is a large reason why satellite systems use lower frequencies, and can be explored further in Appendix \ref{appen_atmos_atten}.} Traditional satellite systems are assigned to a section within the microwave range of the electromagnetic spectrum, as seen in Fig. \ref{fig:em_spectrum}.\footnote{Channel congestion has become a serious issue for in lower frequency bands due to an influx in satellite communication. New technologies are being investigated so that higher bands can be used\cite{freq_bands}.} Examples of these sections are the X-band and Ku-band, within which companies are assigned Earth-to-space (uplink) or space-to-Earth (downlink) channels through which they can transfer their data. Not only do we need to encode our data into a wave, but we also need to keep our signal distinct from others by using allocated frequency channels. But creating, sending, and receiving these waves at these specific frequencies requires antennas.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=5.0 in]{figures/frequency range.jpeg}
+\caption{The radio and microwave regions of the electromagnetic spectrum. The microwave region used for satellite communication is expanded to explain the different bands within that region\cite{freq_bands}.}
+\label{fig:em_spectrum}
+\end{figure}
+
+\subsection{The Antenna}
+\label{antenna}
+
+The data sent to the Brawl Stars servers can be represented with electromagnetic waves, which we can relay to the satellite. However, the satellite is hundreds or thousands of miles above Earth's orbit travelling at speeds up to almost $8\si{km/s}$. So to reach the satellite, we must create, direct, and strengthen the waves using an antenna. There are many different types of antennas and they can be found in almost every device nowadays. The average person carries multiple antennas with them wherever they go for use with GPS, Wi-Fi, cellular, Bluetooth, Radio-Frequency Identification (RFID), or near field communication (NFC).\footnote{Radio-Frequency Identification and near field communication might be less well known to most people, but they are used in a bunch of applications including Carleton OneCards and electronic payment such as Apple Pay.} However, no matter their usage, all antennas provide a means of at least transmitting or receiving data (if not both) between different devices. There are many types of antennas, including wire, aperture, microstrip, array, reflector, and lens.\footnote{The most common type of microstrip antenna is a patch antenna. These are often used together in an array to create a stronger collective antenna with more desirable radiation characteristics that are discussed in Section \ref{ant_properties}.}\footnote{A common example of a reflector is the parabolic dish antenna that is often used for DISH Network and DIRECTV.} The main two used for satellite internet are reflectors and array antennas. All antennas are transducers, which means they use the same fundamental methods to convert a voltage into the radiation of a modulated wave or vice versa with reception. To explain how this conversion happens, we will first understand the simplest antenna: the dipole antenna. Although antennas greatly differ in shape and size, the dipole is a good example to learn from. Learning about one antenna first will allow us to apply those concepts to understand larger and more sophisticated antennas.
+
+\begin{figure}[htp]
+    \hspace*{\fill}%
+    \subcaptionbox{
+    \label{fig2:dipole_transmit}}{\includegraphics[width=2in]{figures/dipole_trans.jpg}}\hfill%
+    \subcaptionbox{
+    \label{fig2:dipole_receive}}{\includegraphics[width=2in]{figures/dipole_receive.jpg}}%
+    \hspace*{\fill}%
+
+    \bigskip
+    
+\caption{Two diagrams of a half-wave dipole antenna with two metal rods extending in opposite directions, where (a) depicts the transmitting dipole and (b) shows the same dipole antenna but used for receiving electromagnetic waves. For (a), the transmitter applies an oscillating voltage to create an alternating current, creating an electromagnetic wave. The red wave curve displays the voltage across the two rods, while the blue represents the current. For (b), the metal rods are connected by a receiver $R$ and as the incoming electric field oscillates, the charges are pushed from one rod to the other, creating an alternating current that the receiver can measure. In either case, a dipole is just two conductors pointing in opposite directions and connected by either a transmitter or a receiver\cite{transmitting_antenna}\cite{receiving_antenna}.}
+
+\label{fig:dipole_antenna}
+\end{figure}
+
+\subsubsection{Deriving the Electric Field}
+\label{derive_efield}
+
+A transmitting antenna produces an electric and magnetic field that are inextricably connected. This means we can focus on explaining the electric field an antenna produces since the magnetic field will match. To do so we want to define a dipole system similar to Fig. \ref{fig:dipole_antenna} and derive its radiated electric field. Our system will include two metal spheres of charges $+q(t)$ and $-q(t)$ separated by a distance $d$ and connected by a fine wire, as seen in Fig. \ref{fig:dipole_system}. When observed at a point $\vec{r}$ from the center of the system at angle $\theta$ from the $z$-axis, each sphere is a distance $\rcurs_+$ and $\rcurs_-$ away from the observation point. Using the law of cosines, we can define these distances as 
+\begin{equation}
+\rcurs_\pm = \sqrt{r^2\mp rd\cos\theta + (d/2)^2}.
+    \label{eq:rcurs_pm}
+\end{equation}
+At time $t$, the charge of the upper sphere at $z = +d/2$ is given by $q(t)$, while the charge of the lower sphere at $z = -d/2$ is $-q(t)$. If we were to drive the charges back and forth along the wire at an angular frequency $\omega$, then we could represent the charge over time as
+\begin{equation}
+q(t) = q_0 \cos(\omega t),
+    \label{eq:qt}
+\end{equation}
+where $q_0$ is the maximum amplitude of the charges. This results in an oscillating electric dipole in the $\hat{z}$ direction, which is given by
+\begin{equation}
+\vec{p}(t) = p_0 \cos(\omega t)\hat{z},
+    \label{eq:osc_elec_dipole}
+\end{equation}
+and has a maximum dipole moment of $p_0 = q_0d$\footnote{An electric dipole is a separation of charges $q(t)$ and $-q(t)$ into two opposite poles separated by a distance $d$}. 
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=5.0 in]{figures/e_field_dipole.png}
+\caption{We treat the dipole as a thin wire of length $d$ along the $\hat{z}$ direction, connecting two metal spheres with charge $+q(t)$ and $-q(t)$. We observe the emitted electric and magnetic fields at some far-field point $\vec{r}$ at angle $\theta$ from the $\hat{y}$ axis. The distance from each sphere is given by $\rcurs_+$ and $\rcurs_-$, which each can be represented by a combination of $r$ (the magnitude of $\vec{r}$), $d$, and $\theta$\cite{griffiths_2019}.}
+\label{fig:dipole_system}
+\end{figure}
+
+Given a charge density $\rho(r,t)$ and current density $\vec{J}(\vec{r},t)$, we want to derive the electric and magnetic fields produced by the dipole antenna. We can begin with Maxwell's equations, which include Gauss’ Laws
+\begin{equation}
+\vec{\nabla} \cdot \vec{E} = \frac{1}{\epsilon}\rho
+    \label{eq:gauss_efield}
+\end{equation}
+and
+\begin{equation}
+\vec{\nabla} \cdot \vec{B} = 0,
+    \label{eq:gauss_bfield}
+\end{equation}
+Faraday's Law
+\begin{equation}
+\vec{\nabla} \times \vec{E} = -\frac{\partial \vec{B}}{\partial t},
+    \label{eq:faradays_law}
+\end{equation}
+and Ampere's Law
+\begin{equation}
+\vec{\nabla} \times \vec{B} = \mu_0\vec{J} + \mu_0\epsilon_0\frac{\partial \vec{E}}{\partial t}.
+    \label{eq:amperes_law}
+\end{equation}
+Although it might not be clear now, it will be easiest to solve for $\vec{E}$ and $\vec{B}$ by representing the fields in terms of the scalar potential $V$ and vector potential $\vec{A}$. In electrodynamics, $\vec{B}$ is divergenceless, and so we can define it as
+\begin{equation}
+\vec{B} = \vec{\nabla} \times \vec{A},
+    \label{eq:B_potential}
+\end{equation}
+which we can do this since $\vec{A}$ is some arbitrary vector\cite{griffiths_2019}. We could define it as $\vec{B} = 2\vec{A}$ if we wanted to, but it benefits us to define it like Eq. \ref{eq:B_potential}. Combining Eq. \ref{eq:B_potential} with Eq. \ref{eq:faradays_law} gives us
+\begin{equation}
+\vec{\nabla} \times \vec{E} = -\frac{\partial (\vec{\nabla} \times \vec{A})}{\partial t} \\
+\vec{\nabla} \times (\vec{E} + \frac{\partial \vec{A}}{\partial t})= 0.
+\end{equation}
+Unlike $\vec{E}$ alone, this curl does not vanish. Therefore, we can write it as the gradient of a scalar
+\begin{equation}
+\vec{E} + \frac{\partial \vec{A}}{\partial t} = -\vec{\nabla}V,
+\end{equation}
+where we have (similarly to $\vec{A}$) defined an arbitrary scalar $V$. This allows us to express our electric field as 
+\begin{equation}
+\vec{E} = -\vec{\nabla} V - \frac{\partial \vec{A}}{\partial t}.
+    \label{eq:E_potential}
+\end{equation}
+If we know $V$ and $\vec{A}$, then we can find $\vec{E}$ or $\vec{B}$ of our antenna using Eq. \ref{eq:E_potential} and Eq. \ref{eq:B_potential}. By some manipulation, we can plug Eq. \ref{eq:E_potential} into Eq. \ref{eq:gauss_efield} to get
+\begin{equation}
+\vec{\nabla} \cdot (-\vec{\nabla} V - \frac{\partial \vec{A}}{\partial t})= \frac{1}{\epsilon}\rho,
+\end{equation}
+which simplifies to
+\begin{equation}
+\nabla^2 V + \frac{\partial}{\partial t}(\vec{\nabla} \cdot A) = - \frac{1}{\epsilon_0}\rho.
+    \label{eq:intermediate_e}
+\end{equation}
+Plugging Eq. \ref{eq:E_potential} and Eq. \ref{eq:B_potential} into Eq. \ref{eq:amperes_law} gets us
+\begin{align}
+\vec{\nabla} \times (\vec{\nabla} \times \vec{A}) = \mu_0\vec{J} + \mu_0\epsilon_0\frac{\partial (-\vec{\nabla} V - \frac{\partial \vec{A}}{\partial t})}{\partial t}\\
+\vec{\nabla} (\vec{\nabla} \cdot \vec{A}) - \nabla^2 \vec{A} = \mu_0\vec{J} - \mu_0\epsilon_0\vec{\nabla}\frac{\partial V}{\partial t} - \mu_0\epsilon_0\frac{\partial^2 \vec{A}}{\partial t^2},
+\end{align}
+where we have used the vector identity
+\begin{equation}
+\vec{\nabla} \times (\vec{\nabla} \times \vec{A}) = \vec{\nabla} (\vec{\nabla} \cdot \vec{A}) - \nabla^2 \vec{A}
+\end{equation}
+to simplify the left-hand side. With some shuffling of terms we find that
+\begin{equation}
+(\nabla^2 \vec{A} - \mu_0 \epsilon_0 \frac{\partial^2 \vec{A}}{\partial t^2}) - \vec{\nabla}(\vec{\nabla} \cdot \vec{A} + \mu_0 \epsilon_0 \frac{\partial V}{\partial t}) = - \mu_0 \vec{J},
+    \label{eq:intermediate_b}
+\end{equation}
+with Eq. \ref{eq:intermediate_e} and Eq. \ref{eq:intermediate_b} containing all the information in Maxwell’s equations. Although these are messy, we can utilize a gauge transformation, which are explained further in Appendix \ref{appen_gauges}, to systematically transform the potentials while leaving the fields invariant. In other words, we can simplify Eq. \ref{eq:intermediate_b} and Eq. \ref{eq:intermediate_e} without affecting $\vec{E}$ and $\vec{B}$. The Lorenz gauge defined as
+\begin{equation}
+\vec{\nabla} \cdot \vec{A} = -\mu_0\epsilon_0\frac{\partial V}{\partial t}
+    \label{eq:lorenz_gauge}
+\end{equation}
+works nicely for us here since there is a $\vec{\nabla} \cdot \vec{A}$ term in both Eq. \ref{eq:intermediate_e} and Eq. \ref{eq:intermediate_b}. Doing this substitution of Eq. \ref{eq:lorenz_gauge} into Eq. \ref{eq:intermediate_e} gets us
+\begin{equation}
+\nabla^2 V + \frac{\partial}{\partial t}(-\mu_0\epsilon_0\frac{\partial V}{\partial t}) = - \frac{1}{\epsilon_0}\rho \\
+\nabla^2 V - \mu_0 \epsilon_0 \frac{\partial^2 V}{\partial t^2} = - \frac{1}{\epsilon_0}\rho,
+    \label{eq:simplify_intermediate_e}
+\end{equation}
+and substituting Eq. \ref{eq:lorenz_gauge} into Eq. \ref{eq:intermediate_b} provides
+\begin{equation}
+(\nabla^2 \vec{A} - \mu_0 \epsilon_0 \frac{\partial^2 \vec{A}}{\partial t^2}) - \vec{\nabla}\cancelto{0}{(-\mu_0\epsilon_0\frac{\partial V}{\partial t} + \mu_0 \epsilon_0 \frac{\partial V}{\partial t})} = - \mu_0 \vec{J} \\
+\nabla^2 \vec{A} - \mu_0 \epsilon_0 \frac{\partial^2 \vec{A}}{\partial t^2} = - \mu_0 \vec{J}.
+    \label{eq:simplify_intermediate_b}
+\end{equation}
+We can notice the left-hand side in both Eq. \ref{eq:simplify_intermediate_e} and Eq. \ref{eq:simplify_intermediate_b} look very similar. To take advantage of this and simplify more, we define the d'Alembertian operator
+\begin{equation}
+\square^2 \equiv \nabla^2 - \mu_0 \epsilon_0 \frac{\partial^2}{\partial t^2},
+    \label{eq:dAlembertian}
+\end{equation}
+which we can then apply to Eq. \ref{eq:simplify_intermediate_e} and Eq. \ref{eq:simplify_intermediate_b} to get
+\begin{equation}
+\square^2 \vec{V} = -\frac{1}{\epsilon_0} \rho
+    \label{eq:reduced_e}
+\end{equation}
+and
+\begin{equation}
+\square^2 \vec{A} = -\mu_0 \vec{J}.
+    \label{eq:reduced_b}
+\end{equation}
+In the static case when $\square^2 = \nabla^2$, Eq. \ref{eq:reduced_b} and Eq. \ref{eq:reduced_e} reduce to Poisson's equation of the form
+\begin{equation}
+    \nabla^2 \vec{V} = -\frac{1}{\epsilon_0} \rho
+\end{equation}
+and
+\begin{equation}
+    \nabla^2 \vec{A} = -\mu_0 \vec{J},
+\end{equation}
+which have a solution\cite{poisson}. There is not enough space to flesh out the derivation completely here, but it can be found in Griffiths\cite{griffiths_2019}. Using the accepted static solution with respect to Fig. \ref{fig:retarded_system} we get
+\begin{equation}
+V(\vec{r}) = \frac{1}{4 \pi \epsilon_0}\int \frac{\rho (\vec{r}')}{\rcurs}\dd \tau'
+    \label{eq:V_static}
+\end{equation}
+and
+\begin{equation}
+\vec{A}(\vec{r}) = \frac{\mu_0}{4 \pi}\int \frac{\vec{J}(\vec{r}')}{\rcurs}\dd \tau'.
+    \label{eq:A_static}
+\end{equation}
+
+We must remember that we are dealing with a nonstatic wave. In the non-static system in Fig. \ref{fig:retarded_system}, we have a source point $\vec{r'}$ and some observation point $\vec{r}$ both measured from the origin $\mathcal{O}$. If the observer is a distance $\vec{\rcurs}$ from the source, they will not be receiving the potential at that moment, but rather a lagged or retarded potential some time $t_r$ later. We call this lapse of time the retarded time
+\begin{equation}
+t_r = t - \frac{\rcurs}{c},
+    \label{eq:retarded_time}
+\end{equation}
+which is a measure of the time it takes the electromagnetic field travel from the source to the observation point.\footnote{If we consider sound waves as an example, when we see lighting we can count the number of seconds it takes the thunder to reach our ears. Therefore, the thunder - once it reaches our ears - was not emitted the instant it was heard, but rather some time earlier. This is because it takes it takes time for waves to travel. Electromagnetic radiation does the same but just faster.} If we then generalize Eq. \ref{eq:V_static} and Eq. \ref{eq:A_static} to the nonstatic case, they become
+\begin{equation}
+V(\vec{r},t) = \frac{1}{4 \pi \epsilon_0}\int \frac{\rho (\vec{r}',t_r)}{\rcurs}\dd \tau'
+    \label{eq:V_generalized}
+\end{equation}
+and
+\begin{equation}
+\vec{A}(\vec{r},t) = \frac{\mu_0}{4 \pi}\int \frac{\vec{J}(\vec{r'},t_r)}{\rcurs}\dd \tau',
+    \label{eq:A_generalized}
+\end{equation}
+which we can use to find $\vec{E}(\vec{r},t)$ and $\vec{B}(\vec{r},t)$.\footnote{A quick sanity check of plugging Eq. \ref{eq:V_generalized} and Eq. \ref{eq:A_generalized} back into Eq. \ref{eq:reduced_b}, Eq. \ref{eq:reduced_e}, and Eq. \ref{eq:lorenz_gauge} tells us that these solutions agree with our prior equations.}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=4.0 in]{figures/retarded potential.png}
+\caption{A source point of a wave $\vec{r}'$ that projects out through a piece of a volume $\dd \tau'$ and is observed at $\vec{r}$, a distance $\vec{\rcurs}$ from its original emission. Each vector is based from the origin $\mathcal{O}$\cite{griffiths_2019}.}
+\label{fig:retarded_system}
+\end{figure}
+
+We finally have $V$ and $\vec{A}$ and want to apply them to our dipole system in Fig. \ref{fig:dipole_system} to find its electric and magnetic fields. Since we know $\rho$ from Eq. \ref{eq:qt} and $\vec{J}$ from Eq. \ref{eq:osc_elec_dipole}, their integrals with respect to area $\dd\tau'$ simplify to
+\begin{align}
+\int \rho \dd\tau' = q(t_r) \\
+= q_0\cos[\omega(t-\rcurs_+/c)]\\
+\int \vec{J} \dd\tau' = I(t_r) \\
+ = \frac{\dd q}{\dd t}\hat{z} \\
+ = q_0\omega\sin[\omega(t-\rcurs/c)]\hat{z},
+    \label{eq:densities}
+\end{align}
+which means that
+\begin{align}
+    V(\vec{r},t) = \frac{1}{4 \pi \epsilon_0} \int^{\rcurs_+}_{\rcurs_-}\frac{q(t_r)}{\rcurs}\dd\rcurs \\
+    \vec{A}(\vec{r},t) = \frac{\mu_0}{4 \pi} \int_{-d/2}^{d/2} \frac{I(t_r)\hat{z}}{\rcurs}\dd z.
+\end{align}
+Using Eq. \ref{eq:retarded_time} and Eq. \ref{eq:densities} we have
+\begin{equation}
+V(\vec{r},t) = \frac{1}{4 \pi \epsilon_0} \Biggl\{ \frac{q_0\cos[\omega(t-\rcurs_+/c)]}{\rcurs_+} - \frac{q_0\cos[\omega(t-\rcurs_-/c)]}{\rcurs_-}\Biggr\},
+    \label{eq:V_almost_dipole}
+\end{equation}
+while the $\vec{A}$ is
+\begin{equation}
+\vec{A}(\vec{r},t) = \frac{\mu_0}{4 \pi} \int_{-d/2}^{d/2} \frac{q_0 \omega \sin[\omega(t-\rcurs/c)]\hat{z}}{\rcurs}\dd z.
+    \label{eq:A_almost_dipole}
+\end{equation}
+To simplify Eq. \ref{eq:V_almost_dipole} and Eq. \ref{eq:A_almost_dipole}, we must make three assumptions about our system to make our physical dipole into a perfect dipole. We assume the separation between spheres to be much smaller than the distance to the observation point ($d << r$), where $r$ is the magnitude of $\vec{r}$. This assumption eliminates the last term in Eq. \ref{eq:rcurs_pm}. We also assume the wavelength $\lambda = \frac{c}{\omega}$ of the produced waves must also be much smaller than the distance to the observation point ($d << \lambda$). This assumption ignores higher-order multipole moments of the charge distribution. Finally, we want to only consider the far field, which is when the distance to the observation is much larger than the wavelength ($r >> \frac{c}{\omega}$). These three assumptions reduce Eq. \ref{eq:V_almost_dipole} into the form
+\begin{equation}
+V(r,\theta,t) = -\frac{p_0\omega}{4 \pi \epsilon_0 c}(\frac{\cos\theta}{r})\sin[\omega(t-\frac{r}{c})],
+    \label{eq:V_dipole}
+\end{equation}
+while the first two assumption reduces Eq. \ref{eq:A_almost_dipole} into
+\begin{equation}
+\vec{A}(r,\theta,t) = -\frac{\mu_0p_0\omega}{4 \pi r}\sin[\omega(t-\frac{r}{c})]\hat{z}.
+    \label{eq:A_dipole}
+\end{equation}
+Although the derivation was shortened, those who are interested in following the derivation a little more rigorously can do so easily\cite{griffiths_2019}.
+Finally, we have both of the potentials for this system, so solving for the electric field is just plugging Eq. \ref{eq:V_dipole} and Eq. \ref{eq:A_dipole} into Eq. \ref{eq:E_potential}, to get the electric field
+\begin{equation}
+\vec{E}(\vec{r},\theta,t) = -\frac{\mu_0p_0\omega^2}{4 \pi}(\frac{\sin\theta}{r})\cos[\omega(t-\frac{\vec{r}}{c})]\hat{\theta}
+    \label{eq:E_dipole}
+\end{equation}
+for this system. The magnetic field $B$ is similarly given by plugging Eq. \ref{eq:B_dipole} into Eq. \ref{eq:B_potential} to find 
+\begin{equation}
+\vec{B}(\vec{r},\theta,t) = -\frac{\mu_0p_0\omega^2}{4 \pi c}(\frac{\sin\theta}{r})\cos[\omega(t-\frac{\vec{r}}{c})]\hat{\phi},
+    \label{eq:B_dipole}
+\end{equation}
+which differs from $\vec{E}$ by mainly its direction, which is in the $\hat{\phi}$ direction. We can see that Eq. \ref{eq:E_dipole} and Eq. \ref{eq:B_dipole} represent monochromatic waves of frequency $\omega$ traveling in the radial direction at $c$, with fields in phase, mutually perpendicular, and transverse; $E_0/B_0 = c$. All of this we expect of electromagnetic waves in free space\cite{griffiths_2019}.
+
+We can also show that Eq. \ref{eq:E_dipole} matches the definition of a traveling wave Eq. \ref{eq:electric_field}. We can distribute $\omega$ in Eq. \ref{eq:E_dipole} and switch the arguments of of the even $\cos$ function without losing generality. With these, we can simplify it to look like Eq. \ref{eq:electric_field} when $E_0 = -\frac{\mu_0p_0\omega^2}{4 \pi}(\frac{\sin\theta}{r})$, $\vec{k} = \frac{\omega}{c}\hat{r}$, and $\phi_0 = 0$. Since the equations match, we have derived and argued how $\vec{E}$ matches the form expected of a traveling wave.\footnote{To actually prove Eq. \ref{eq:E_dipole} is a travelling wave would involve plugging the equation for the wave into the Schrödinger equation and solving to make sure it is satisfied.} Therefore, we can use antennas to send our Brawl Stars taunting emote signal to the orbiting satellite.
+
+\subsubsection{Antenna Properties}
+\label{ant_properties}
+
+Now that we can calculate the $\vec{E}$ produced by our ground antenna and measured by our satellite, we need the signal to be strong enough for the satellite's receiving antenna to measure $\vec{E}$. There are several key characteristics that quantify an antenna's ability to reach its destination. A crucial quantity that describes the magnitude and direction of energy flow in electromagnetic waves is the Poynting vector $\vec{S}(\vec{r},t)$, which is given by
+\begin{equation}
+\vec{S}(\vec{r},t) = \frac{1}{\mu_0}(\vec{E}\times \vec{B}),
+    \label{eq:Poynting_eb}
+\end{equation}
+in units $\si{W/m^2}$. The Poynting vector turns out to be a very useful way of describing all aspects of our field's strength and directivity in the far-field. By applying Eq. \ref{eq:E_dipole} and Eq. \ref{eq:B_dipole} to Eq. \ref{eq:Poynting_eb} and averaging over the time of a complete wave cycle, we find the time-averaged Poynting vector $\langle S\rangle$ for our dipole antenna to be
+\begin{equation}
+\langle \vec{S}\rangle = (\frac{\mu_0p_0^2\omega^4}{32 \pi^2 c})\frac{\sin^2\theta}{r^2}\hat{r}.
+    \label{eq:Poynting}
+\end{equation}
+Otherwise known as the time-averaged radiated power density, Eq. \ref{eq:Poynting} represents the time-averaged power flow due to time-averaged electric and magnetic fields for our dipole antenna. With our antenna, we expect this time-averaged power density to vary with $\theta$, as well as decrease in power as $r$ gets larger, which is exactly what we get. Using this quantity, we can describe the total radiated power $P_{rad}$ in all directions from our antenna as
+\begin{align}
+P_{rad} = \int \langle \vec{S}\rangle \cdot d\vec{A} \\
+= \frac{\mu_0p_0^2\omega^4}{12 \pi c},
+    \label{eq:p_radiated}
+\end{align}
+where we have integrated $\langle S\rangle$ over a change in cross-sectional area $d\vec{A}$ through which the Poynting vector travels and then given the dipole antenna specific result in the second line. In Eq. \ref{eq:p_radiated}, we have just summed the time-averaged radiated power density over all the surface through which it can radiate, which for this antenna is a sphere. The resulting value indicates the total instantaneous power radiated from the antenna in all directions. Therefore, it makes sense that it does not depend on $r$ or $\theta$. Another measure of power concentration is the radiation intensity $U(\theta,\phi)$ which is in terms of the incremental solid angle $d\Omega$ subtended by $dA$ so that $d\Omega = dA/r^2$ and therefore with Eq. \ref{eq:Poynting} we have
+\begin{align}
+U(\theta,\phi) = r^2\langle S\rangle \\
+= (\frac{\mu_0p_0^2\omega^4}{32 \pi^2 c})\sin^2\theta\hat{r},
+    \label{eq:intensity}
+\end{align}
+where again we have the dipole specific result as well. The key difference between Eq. \ref{eq:Poynting} and Eq. \ref{eq:intensity} is that the former (radiation density) is per unit area, whereas the latter (radiation intensity) is per unit solid angle. If we are to aim our antenna at a satellite, we care more about the power of an antenna in a particular direction, not over an area. Given we know the power radiated outwards everywhere and in a particular direction, we can more rigorously define an antenna's directivity $D(\theta,\phi)$ as how well an antenna directs its energy toward a particular direction. Therefore, directivity is given in terms of Eq. \ref{eq:intensity} and Eq. \ref{eq:p_radiated} as
+\begin{align} 
+D(\theta,\phi) = 4\pi \frac{U(\theta,\phi)}{P_{rad}} \\
+= \frac{3}{2}\sin^2\theta,
+    \label{eq:directivity}
+\end{align}
+where we again calculate the directivity of our dipole as well. The directivity of course depends on $\theta$ and is given by the dimensionless units $\si{dB}$. In practice, it becomes useful to classify how well an antenna coverts input power into radiation (our signal) in a particular direction. This metric is the gain of an antenna $G(\theta,\phi)$ given by
+\begin{align}
+G(\theta,\phi) = 10\log_{10}(\frac{P_{max}}{P_{ref}}) = \eta_{rad}D(\theta,\phi) \\
+= \eta_{rad}\frac{3}{2}\sin^2\theta,
+    \label{eq:gain}
+\end{align}
+where $G(\theta,\phi)$ is defined by either the maximum power density $P_{max}$ in a particular direction and the power density of a reference antenna $P_{ref}$.\footnote{A very common reference is the theoretical isotropic radiator. It is omnidirectional and radiates uniformly in all directions with equal power\cite{Balanis_2005}\cite{schelkunoff1952antennas}. At a distance, the Sun is an isotropic radiator of electromagnetic radiation.} Gain can also be given by the antenna's radiation efficiency $\eta_{rad}$ and the directivity as seen in Eq. \ref{eq:gain}. We can illustrate an antenna's directivity and gain using radiation patterns, of which in particular our derived dipole is seen in Fig. \ref{fig:dipole_radiation}. In general, radiation patterns display the $G(\theta,\phi)$ of an antenna in all directions. The shape of the radiation is important to identify an antenna's directivity while also indicating amount of antenna gain in particular directions. The dipole antenna is omnidirectional, so the electric field projects out in the three-dimensional torus radiation pattern seen in Fig. \ref{fig2:dipole_rad_3d} with a cross-sectional in Fig. \ref{fig2:dipole_rad}. By means of Eq. \ref{eq:Poynting}, Eq. \ref{eq:intensity} and Eq. \ref{eq:directivity} dictate that as $\theta \rightarrow 0$ or $\pi$, then the radiation intensity $U \rightarrow 0$, which is the exact behavior we see in the radiation pattern in Fig. \ref{fig:dipole_radiation}. It is also helpful to note that the orientations in Fig. \ref{fig:dipole_radiation} are the same as in Fig. \ref{fig:dipole_system}, where $\hat{z}$ extends vertically alongside the two extending metal rods.
+
+\begin{figure}[htp]
+    \hspace*{\fill}%
+    \subcaptionbox{
+    \label{fig2:dipole_rad_3d}}{\includegraphics[width=2in]{figures/omnidirectional_radiation_3d.png}}\hfill%
+    \subcaptionbox{
+    \label{fig2:dipole_rad}}{\includegraphics[width=2in]{figures/omnidirectional_radiation.png}}%
+    \hspace*{\fill}%
+
+    \bigskip
+    
+\caption{The radiation pattern for a dipole antenna. Fig. \ref{fig:dipole_radiation} shows the radiation pattern given by (a) in three dimensions with the dotted line indicating the corresponding two dimensional cross-section seen in a rotated version (b). Being omnidirectional, the antenna radiates out in all directions except along the direction of the rods in the $\hat{z}$ direction. In this direction the fields from one rod cancel with those from the other since they will be equal and opposite\cite{dipole_radiation}.}
+
+\label{fig:dipole_radiation}
+\end{figure}
+
+Although our dipole is omnidirectional, satellite antennas are usually directional like Fig. \ref{fig:radiation_pattern} so they can properly aim and reach our satellites. As we adjust the structure of an antenna, we can alter the electric field in a manner that creates more focused radiation patterns that improves gain. For instance, aperture, reflector, and array antennas use techniques to focus the signal in a particular direction, which is called beamforming and is discussed more in Section \ref{dishy}. Traditionally, a two-way parabolic dish antenna - like the directive antenna shown in Fig. \ref{fig:radiation_pattern} - is used to increase the gain of the signal.\footnote{Most television providers also use parabolic dish antennas, but in their case the user antenna is only capable of receiving data.}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=4.0 in]{figures/directive_radiation.jpeg}
+\caption{A typical polar radiation pattern for a directive antenna. Although some side lobes and a back lobe still occur, the main lobe is much stronger (measured in $\si{dB}$) and more directed than an omnidirectional antenna. This allows us to target and send the waves directly to the satellite\cite{direct_radiation}.} 
+\label{fig:radiation_pattern}
+\end{figure}
+
+The final property common among most antennas that is worth mentioning is reciprocity. Antenna reciprocity allows the other antenna properties that we have already discussed to be the same whether the antenna is used for transmitting or receiving a signal. Given an analysis on the transmission of a signal, we can also characterize receiving the signal as well. Starting with only a Brawl Stars signal that has been converted to a wave and radiated by an antenna, we can now understand that radiation and also how it will be received. Next, given we have a directed signal for better gain and less signal loss, we will learn how to determine the satellite's location in orbit so that the signal can be sent accurately from the user antenna to the satellite's antenna.
+
+\subsection{Satellites}
+\label{satellites}
+
+Now that we have a signal to send, we need to know where to send it. All satellites are located hundreds or thousands of miles above our heads in orbit around the Earth. Different systems might be in different orbits, but even so both the user terminals and satellites need to always know where each other are. In this subsection, I will explain the different orbits a satellite may have and then expand on what techniques the user terminal and satellite utilize to locate themselves and stay connected.
+
+\subsubsection{Orbits}
+\label{orbits}
+
+Most telecommunications satellites, such as those used for satellite internet, have quasi-circular orbits unlike the elliptical orbits discussed in Appendix \ref{appen_orbit}. Given an Earth of mass $M$ and a satellite of mass $m$ separated by a distance $R$ that is the sum of the radius of Earth $R_E$ and orbit altitude $h$, we can define the force of gravity $F_g$ as
+\begin{equation}
+F_g = \frac{GMm}{(R_E + h)^2},
+    \label{eq:gravity}
+\end{equation}
+and the centripetal force $F_c$ as
+\begin{equation}
+F_c = \frac{mv^2}{(R_E + h)},
+    \label{eq:centripetal}
+\end{equation}
+where $G$ is the gravitational constant. For a circular orbit like in Fig. \ref{fig:centrifugal}, we have declared that $F_g = F_c$ and so we can calculate the magnitude of the velocity $v$ to be 
+\begin{equation}
+v = \sqrt{\frac{GM}{(R_E + h)}} = \frac{2\pi (R_E + h)}{T},
+    \label{eq:velocity}
+\end{equation}
+where we have used the distance travelled over time to describe the orbital velocity as the circumference of the orbit $2\pi (R_E + h)$ over the period $T$. We can then find the time it takes a satellite to circle the Earth by
+\begin{equation}
+T = \frac{2\pi (R_E + h)^{3/2}}{\sqrt{GM}},
+    \label{eq:period}
+\end{equation}
+which is analogous to Law \ref{third law} from Kepler's Laws in Appendix \ref{appen_orbit} for a circular orbit when $a = r$. Both velocity and period are important for understanding the motion of nearly circular orbiting satellites. Since they depend on the height of the orbit, these calculations are important for understanding orbital transfers, orbit stability, avoiding debris, and predicting the drift and future positioning of the satellite.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=4.0 in]{figures/circular_orbit.jpeg}
+\caption{A circular orbit of a satellite around Earth. The satellite of mass $m$ has an orbital velocity $v$ that counterbalances the force of gravity $\vec{F}$ at a distance $R$ from the center of Earth with mass $M$\cite{circular_orbit}.}
+\label{fig:centrifugal}
+\end{figure}
+
+Satellite orbits are generally grouped together by their height above Earth, which can be seen in Fig. \ref{fig:orbits}\cite{Types_of_orbits}. The lowest group is Low Earth Orbit (LEO) satellites, which maintain an altitude below $2,000\si{km}$, but above $200\si{km}$ to remain above Earth's atmosphere.\footnote{the Kármán line is the "line" between Earth's atmosphere and space. However, it actually extends much farther out and atmospheric drag can occur even over $400\si{km}$ up.}\footnote{For reference, commercial planes fly at altitudes from $8\si{km}$ to $13\si{km}$, so these orbits are still quite high} This orbit range is often used by satellite imaging, the ISS (International Space Station), and telecommunications constellations. However, most traditional telecommunication and weather satellites use a geostationary orbit (GEO) at about $36,000\si{km}$\cite{a_lost_connection}.\footnote{Geostationary orbits are also referred to as geosynchronous.}\footnote{Another two groups that we will not focus too much on are Medium Earth Orbit (MEO) and Highly Elliptical Orbit (HEO). They are located between LEO and GEO satellites, and HEO satellites possess an highly elliptical orbit. They are primarily used for navigation such as the Global Positioning System (GPS), some communications, and remote sensing.} By applying Eq. \ref{eq:velocity} and Eq. \ref{eq:period} for each orbital type, we can calculate the approximate orbital period and velocity for each orbital group, as seen in Table \ref{tab:orbits}. From the table, we can see that GEO satellites are very useful. They always face the same area on Earth as they orbit since their period is equal to Earth's rotational period. We can also see from that the velocity of LEO satellites is much greater than GEO and the period is much smaller. This corresponds to a much smaller coverage area of LEO satellites, which hinders their ability to maintain communication with ground antennas. Orbital decay is also another important consideration of LEO satellites. In Appendix \ref{appen_decay}, there is more depth on why orbital decay is dangerous left unchecked. Each of these factors make it difficult, but not impossible, to achieve LEO satellite internet.
+
+\begin{table}[ht]
+\caption{A satellite's orbital altitude, period, velocity, and nadir angle $\theta$ that provide a coverage radius, area, and fractional amount of the Earth for various circular orbits at high altitude platform (HAP), low Earth orbit (LEO), medium Earth orbit (MEO), and geostationary Earth orbit (GEO). Adapted from \cite{richharia_westbrook_2010}.}
+\centering
+\begin{tabular}{cc}
+\includegraphics[width=5.0 in]{figures/orbit_table.png}
+\end{tabular}
+\label{tab:orbits}
+\end{table}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=4.0 in]{figures/Orbits_half.png}
+\caption{The orbit groups used to classify satellite orbit altitudes with the maximum possible orbit for each range. The most common telecommunications groups are LEO, GEO, and sometimes HEO. Meanwhile, MEO satellites are commonly used for GPS and frequently HEO are used for remote sensing\cite{Types_of_orbits}.}
+\label{fig:orbits}
+\end{figure}
+
+\subsubsection{Coverage Area}
+\label{coverage_area}
+
+Another important characteristic for telecommunication satellites is their coverage area $A_C$. Satellite internet requires a line of sight (LoS) to transmit and receive data. For satellite telecommunications, LoS is when a satellite and its user have a path between them that is "unobstructed". While there may be small obstructions, the Earth is usually the main obstruction we care about. In Fig. \ref{fig:coverage} we can note that the user $P$ and satellite $S$ have a clear LoS given by $r$ since there is no part of Earth between them. At height $R_S$, the satellite has a coverage angle $\phi$ of
+\begin{equation}
+\phi = \frac{\pi}{2} - \theta - \epsilon,
+    \label{eq:coverage_angle}
+\end{equation}
+where the user is at height $R_P$, the radius of the Earth is $R_E$, and the nadir angle is $\theta$. The nadir angle, using the vertical plane $R_S$ as zero, is defined as 
+\begin{equation}
+\theta = \sin^{-1}(\frac{R_P}{R_S}\cos\epsilon),
+    \label{eq:nadir_angle}
+\end{equation}
+and the elevation angle $\epsilon$ is the angle formed between the horizontal line and the $r$.\footnote{This assumes a minimum elevation angle of $\epsilon \rightarrow 10^\circ$.} The coverage radius $R_C$, defined here as the radius from the sub-satellite point to the edge of coverage area measured along the Earth’s surface, is
+\begin{equation}
+R_C = R_E \phi,
+    \label{eq:coverage_radius}
+\end{equation}
+and for a cone of apex angle $2\phi$, we can define a cone solid angle $\Omega_C$ of
+\begin{equation}
+\Omega_C = 2\pi (1 - \cos\phi).
+    \label{eq:cone_solid_angle}
+\end{equation}
+We can then finally calculate the coverage area $A_C$ as
+\begin{equation}
+A_C = \Omega_C R_E^2,
+    \label{eq:coverage_area}
+\end{equation}
+which is an important quantity in determining how many users the satellite can service.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=5.0 in]{figures/coverage.png}
+\caption{The coverage of a satellite. The coverage using the geometry from Earth's center to the satellite's position $R_s$, the user's position $R_p$, the Earth's surface $R_E$, the angle $\phi$ between $R_p$ and $R_E$, and the angle $\theta$ between $R_s$ and the path from the user to the satellite $r$\cite{richharia_westbrook_2010}.}
+\label{fig:coverage}
+\end{figure}
+
+\subsubsection{Satellite Attitude Control}
+\label{attitude_control}
+
+Although Eq. \ref{eq:velocity} and Eq. \ref{eq:period} are simple yet powerful for understanding the motion of satellites, we need to know and maintain a satellite's position, orientation, speed, and other orbital characteristics. Attitude (or orientation) sensing and control is a way to identify and maintain a constant and accurate location of the satellite, and to adjust its orientation and orbit should it lose momentum or its direction\cite{Travis20}. There are multiple methods that satellites use to locate themselves in space with internal and external instruments\cite{nasa_attitude}. These include the Global Positioning System (GPS), inertial navigation systems (INS), star trackers, the Doppler effect, satellite laser ranging (SLR), and even more. Each of these techniques require other complex systems that provide important navigation data to the satellite. 
+
+To give an idea of how one of these methods works, I will focus on the Doppler effect and how we use it to gain spatial and temporal data on our satellite. The Doppler effect uses the frequency shifts of the electromagnetic waves from the satellite to the ground stations, which we will discuss in the next section, to identify how the source of the wave (the satellite) is moving in space. If we send a signal of known frequency $f_g$ from a ground station moving at a speed $v_g$ to a satellite with speed $v_s$, we can measure the frequency at the satellite $f_s$ to be
+\begin{equation}
+f_s = \frac{c\pm v_s}{c\pm v_g}f_g,
+    \label{eq:doppler}
+\end{equation}
+where $c$ is the speed of light. If we assume the Earth to be the frame of reference, then $v_g = 0$. We also know $f_g$ and $c$, so if we measure $f_s$ at the satellite, we can solve for $v_s$. This allows the satellite to easily calculate its own speed as it communicates with ground stations during its orbit\cite{Rosen_Gothard_2010}\cite{pedrotti_pedrotti_pedrotti_2019}. By measuring this over time, we can ascertain the time and the acceleration of the satellite's orbit.
+
+Each attitude method provides either spatial or temporal measurements that combine to provide a location in space-time for the satellite with as little error as possible. More information on these attitude control methods can be found in Appendix \ref{appen_attitude}. Some of these techniques also allow the user terminal to identify its location on Earth. With the information of where the satellite and user terminals are, they know where to direct their electromagnetic signals with enough accuracy and precision to maintain a strong and consistent connection so that a user can play Brawl Stars without disruption. 
+
+\subsection{Ground Station}
+\label{ground}
+
+Now that we know the location of the satellite, we can established a connection between the user terminal and the satellite to transfer the Brawl Stars data. When the electromagnetic wave hits the satellite, a receiving antenna on the satellite collects and demodulates the signal. Based on the initial wave modulation, by reversing the process we can return the modulated signal back to its original state. With the original data onboard the satellite, we still need our signal to get where it is supposed to be. Let us again specify the signal to be the game updates and the movement for a North American YouTuber that is actively playing Brawl Stars against an Esports player in Japan. The data needs to reach the server that game is hosted on. Encoded within the metadata of the information onboard the satellite is this destination. To connect back to Earth, satellite internet companies own large antennas that they place around their area of coverage. The satellite will then calculate the closest ground station to the destination that is within sight of the satellite and immediately relay the information via a transmitting antenna. The ground station receives this signal and redirects it through the traditional cable internet towards its final destination. 
+
+Finally the game updates have reached the correct Brawl Stars server. The server reacts to the data and then generates response data for the user. This data must then make the journey again in reverse. For a smooth experience such as playing video games, these streams of data and data requests travel back and forth constantly. Since this lengthy journey is happening very often and the player must wait to move until it receives update data. This makes the latency, or the time it takes the data to go round-trip between satellite and user, extremely important. This is a weakness for most satellite systems that orbit in GEO. The travel time up to and from the satellite might be as high as $600\si{ms}$, about $200$ times slower than a traditional cable internet signal at $30\si{ms}$. Although this may not matter for over $90\%$ of internet traffic, their is an increasing demand for a low-latency satellite services\cite{Satellite_internet_latency_2021}. This is an area that systems such as Starlink attempt to resolve by constructing LEO satellite megaconstellations. 
+
+%--STARLINK SATELLITES--%
+\section{Starlink Satellite System}
+\label{starlink}
+
+The Starlink satellite system is a megaconstellation of about $3300$ active LEO satellites with plans to reach $12000$ and possibly expanding to $42000$. Due to the sheer size, complexity, and cost of a constellation like this, it has not been financially feasible to create such a network of satellites. Traditional satellite internet systems already provide service to remote areas of the world and their large orbits provide great area coverage. However, the main issue with traditional satellite internet is the latency for GEO orbits range between $250$ to even $400\si{ms}$\cite{zhang1997satellite}. With a back-of-the-envelope calculation, a signal at the speed of light ($3\times 10^8\si{km/s}$) would reach satellite in GEO ($3.58 \times 10^4 \si{km}$) in at least $240\si{ms}$ roundtrip. While this might be satisfactory for some online activities, a competitive Brawl Stars players that requires satellite internet would not be able to play. For online multiplayer video games, an acceptable latency (or ping) is anywhere around $40$ to $60$ milliseconds or lower, while a ping of over $100\si{ms}$ will usually mean a noticeable or unacceptable lag in the game. This is the main purpose of Starlink: to provide low-latency internet anywhere on the globe. On their website, Starlink boasts speeds as low as $25\si{ms}$ with actual latency ranged from $40-100\si{ms}$ in Q2 of $2022$. Compared to the $>600\si{ms}$ for GEO competitors, Starlink does achieve its lower latency\cite{ookla}. In the following sections, we will explore how Starlink's system differs from traditional systems, and how it is able to achieve low latency system now, despite previous failures from other companies.
+
+\subsection{Dishy McFlatface}
+\label{dishy}
+
+Similar to traditional satellite systems seen in Fig. \ref{fig:user_terminal}, Starlink's user terminal consists of a router and an antenna. The signals used by Starlink operate in the Ku, Ka, and X bands from Fig. \ref{fig:em_spectrum}. The allocated uplink and downlink frequencies can be seen in Table \ref{tab:starlink} along with the modulation method used by Starlink.
+
+\begin{table}[ht]
+\caption{A table of the Starlink signal characteristics. Included are the ranges of frequencies designated to uplink and downlink channels for multiple users on a particular satellite. These are the particular frequencies allocated to Starlink by the FCC and is important for modulating and demodulating the signal to and from the satellite. The modulation schemes used with Starlink signals include BPSK (binary phase-shift keying) which is the simplest form of phase-shift keying, QAM (quadrature amplitude modulation) which is a form of amplitude modulation, and OQPSK (offset quadrature phase-shift keying) which is another form of phase-shift keying. The advantages of these different modulation schemes over traditional methods can be higher data rates, high noise immunity, low probability of error values, and increased bandwidth\cite{starlink_table}.}
+\centering
+\begin{tabular}{cc}
+\includegraphics[width=5.0 in]{figures/starlink_table.png}
+\end{tabular}
+\label{tab:starlink}
+\end{table}
+
+While most of the user terminal is pretty standard, the signal conversion usually done by a modem is in the antenna, which is nicknamed "Dishy McFlatface"\cite{How_does_Starlink_Satellite_Internet_Work}. Seen in Fig. \ref{fig:dishy}, this antenna is one of the many aspects that sets Starlink apart from traditional systems. Dishy is a phased-array design of $1,280$ aperture-coupled patch antennas arranged in a hexagonal fashion as seen in Fig. \ref{fig:dishy}. The phased-antenna design uses the radiation from an array of antennas to create a radiation beam with more gain. We can use what we learned from Section \ref{antenna} to understand how the individual Starlink aperture-coupled patch antennas are similar yet different. Each antenna is a stack of $6$ layers, and is inside the printed circuit board (PCB) that organizes and controls them. Only the sixth layer protrudes from the PCB, where it is designed to be specifically $1.28\si{cm}$ in diameter. This top antenna patch is structured in this way so that it only receives electromagnetic waves at frequencies within a downlink channel like those specified in Table \ref{tab:starlink}. Like we mentioned in Section \ref{band}, there will be a lot of electromagnetic noise that the system needs to ignore, so this design does that naturally. The lower antenna patch is responsible for generating the electromagnetic at frequencies within one of the uplink channels from Table \ref{tab:starlink}, while the second to top layer transmits it. When receiving signals, a logic flip is switched and the top layer acts as the receiving patch. The very specific frequencies used for transmitting and receiving resonate only with the specific dimensions of their respective layers, so any other noise is naturally filtered out.\footnote{Additionally, there are layers to support circular polarization, a reflective plane in the back, and multiple features for isolating features of one antenna from the others.}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=5.0 in]{figures/dishy_collage.png}
+\caption{Multiple components of the Starlink antenna. Each image is a deeper look at the Starlink antenna, starting at (a) the outer shell of the antenna, which has a base that attaches to the mounting surface, a wire feeding in from the router, and a flat face directed toward the sky. In (b) we see the $6$ layers that make up the antenna array, with one layer (c) being the printed circuit board (PCB) controlling each of the clusters of patch antennas (d) and each of the individual antenna stacks seen in (e). The stack consists of $6$ layers, the first $5$ of which are within the PCB in (c), which combine to produce the electric field we expect\cite{USPTO_report}\cite{How_does_Starlink_Satellite_Internet_Work}.}
+\label{fig:dishy}
+\end{figure}
+
+While some antenna track satellites by adjusting their antenna direction using motors, Dishy uses beam steering. It does use motors to face the correct area of the sky, but not to track the satellite. Instead, Dishy uses beamforming to increase signal gain and then beam steering to follow satellites as they fly by. It combines collective radiation from all $1280$ antennas to create a stronger and more directional electromagnetic waves like in Fig. \ref{fig:beamforming}. This is achieved by adjusting the phase of adjacent antenna waves to shift the center of their interference pattern. If we isolate two antenna and look at their interference, they are analogous to the double-slit experiment. By recalling and expanding those results, we can understand beamforming. 
+
+The superposition principle states if two or more traveling waves are moving through a medium, the resultant value of the wave function at any point is the algebraic sum of the values of the wave functions of the individual waves. This is the key concept of the double-slit experiment in Fig. \ref{fig:double_slit}, which we can use to understand the beamforming seen in Fig. \ref{fig:beamforming}. Given two point sources $S_1$ and $S_2$ and their path lengths $r_1$ and $r_2$, we find that at point $P$ the waves constructively interfere if the path difference $\delta$ given by
+\begin{equation}
+\delta = r_2 - r_1,
+    \label{eq:path_diff}
+\end{equation}
+is equal to
+\begin{equation}
+\delta ,
+    \label{eq:constructive}
+\end{equation}
+or destructively interfere if
+\begin{equation}
+\delta = (m+\frac{1}{2})\lambda,
+    \label{eq:destructive}
+\end{equation}
+where $m$ is some integer. It is also useful to relate $\delta$ to the phase difference (or shift) $\phi$ using
+\begin{equation}
+\phi = \frac{2\pi}{\lambda}\delta,
+    \label{eq:phase_shift}
+\end{equation}
+where we can now change where the constructive interference occurs by adjusting $\phi$. 
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=5.0 in]{figures/double_slit.png}
+\caption{A schematic of the double-slit experiment. Two slits $S_1$ and $S_2$ that are treated as source points will interfere on the screen at point $P$. If the path difference $\delta$ between slits is a multiple of the wavelength $\lambda$ then it will be constructive. If $\delta$ is a multiple of $1/2\lambda$ then it will be destructive interference\cite{mit_waves}\cite{pedrotti_pedrotti_pedrotti_2019}.}
+\label{fig:double_slit}
+\end{figure}
+
+We can alternatively use patch antennas like in Fig. \ref{fig:beamforming} instead of point sources. The idea remains the same. If we have two sources like in Fig. \ref{fig:beamforming}(b), we find an area with constructive interference. As we increase the antennas, we find that area of interference tightens into a beam. This is beamforming and by changing the phase shift $\phi$ between antenna we can turn the interference path as in Fig. \ref{fig:beamforming}(e). This is called beamsteering and is entirely how Starlink's Dishy tracks satellites across the sky.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=5.0 in]{figures/beamforming_array.png}
+\caption{The beamforming of array antenna. In (a) we have a singular antenna that produces an omnidirectional radiation pattern. When we increase it to two in (b), three in (c), or even four in (d), we find that the radiation pattern tightens in shape. By applying a phase shift of $90$ degrees between antenna in (e), we can rotate or "steer" the beam $-30$ degrees azimuth. The nulls indicate attenuation nulls, where the gain drops to $0$ and back out again\cite{Rumney_2013}.}
+\label{fig:beamforming}
+\end{figure}
+
+We see both this beamforming and steering within the Dishy radiation pattern in Fig. \ref{fig:dishy_radiation}. The radiation pattern shows that dishy is steering the main lobe $L_M$ towards the direction $D$ at $\theta \approx 20$ degrees azimuth with a gain of just about $0\si{dB}$, which requires $P_{max}=P_{ref}$ in a particular direction as seen in Eq. \ref{eq:gain}. When an antenna has a gain of $0\si{dB}$, it means that the antenna's radiation pattern is similar to that of an isotropic radiator, which is the traditional reference antenna. In other words, the antenna does not amplify or attenuate the signal it transmits or receives relative to an isotropic radiator. The array creates many smaller lobes $L_S$ that are not directed towards $D$ and are much weaker at less than $-10\si{dB}$. This means the power of our antenna is weaker than the isotropic radiator in that particular direction. So in order to get constructive interference at angle $\theta$, we need adjust the $\phi$ and therefore $\delta$ such that Eq. \ref{eq:constructive} is satisfied. In other words, if we want to direct the collective signal, we just adjust the phase difference between each antenna so that constructive interference occurs in the direction we want. When scaled up to $1280$ antennas in a honeycomb pattern, the Starlink antenna array beamforming is very good, as Fig. \ref{fig:dishy_radiation} can attest. The Starlink patch antennas use similar concepts to those derived in Sec. \ref{antenna} but combine with beamforming to direct and concentrate their signal with power and accuracy. This is especially important for Starlink as the orbits of their satellites are also unorthodox, which we will discuss below.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=4.0 in]{figures/starlink_dishy_radiation_pattern.png}
+\caption{The radiation pattern of the "Dishy McFlatface" Starlink antenna. The antenna utilizes the interference between an array of patch antenna to direct and strengthen the signal. It steers the main lobe $L_M$ towards the direction $D$ at $\theta \approx 20$ degrees azimuth with a gain of just about $0\si{dB}$. The array creates many smaller lobes $L_S$ that are not directed towards $D$ and are much weaker at less than $-10\si{dB}$. To achieve constructive interference at angle $\theta$, we need adjust the phase difference $\phi$ between antennas. This allows us to target and send the waves directly to the satellites that are flying by overhead\cite{USPTO_report}.}
+\label{fig:dishy_radiation}
+\end{figure}
+
+\subsection{The Satellites}
+\label{starlink_satellites}
+
+Many companies attempted to create LEO constellations over the past few decades. The reward of low latency satellite internet was too good to pass up. But none were very successful.\footnote{In the 1990s, several LEO satellite internet constellations were proposed and attempted, including Celestri (63 satellites) and Teledesic (initially 840 and then later 288 satellites). These projects were abandoned due to financial issues.} With the small coverage area and fast orbits of LEO seen in Table \ref{tab:orbits}, many satellites are needed to provide full coverage. Despite the technological capabilities of many companies, none could survive the economic hardship of send so many satellites into space. That is until technology became a little cheaper and SpaceX thought more economically. SpaceX started Starlink and came up with brilliant ways to save space and money on their launches of satellites. They made their F-9 rocket reusable and satellites compact, allowing for an entire orbital chain of $60$ satellites to fit in their F-9 rocket. So far, Starlink has about $3300$ active satellites that work together. Individually they are similar to traditional satellites, but together they act as a collective network to an extent unlike traditional systems. Since the current constellation of  satellites are in LEO around $550$ to $590\si{km}$ above the Earth's surface, each Starlink satellite is only in view of the user terminal for $5$ to $8$ minutes for mid-latitude located user terminals.\footnote{Different chains orbit at different latitudes depending on what areas they service. Starlink can currently service to about $60$ degrees latitude, but focus on the majority of users within the mid-latitude area.} This is very quick, which is why beamforming is so important. In order to maintain a consistent connection, chains of satellites are created that follow the same orbit, as seen in Fig. \ref{fig:constellation}. 
+
+\begin{figure}[htp]
+    \hspace*{\fill}%
+    \subcaptionbox{
+    \label{fig2:actual_constell}}{\includegraphics[width=2in]{figures/starlink_constellation.png}}\hfill%
+    \subcaptionbox{
+    \label{fig2:theory_constell}}{\includegraphics[width=2in]{figures/Full-network-of-the-Starlink-mega-constellation-assuming-a-grid-topology-Figure-1a.jpg}}%
+    \hspace*{\fill}%
+
+    \bigskip
+    
+\caption{The megaconstellation of around $3300$ Starlink satellites. This LEO system will include over around $4000$ satellites when fully completed, which thousands more being deployed in other similar constellations at different altitudes. The current Starlink system as of January $2023$ can be seen in (a), while the future version of the complete constellation and its chains can be seen in (b). A new chain beginning to disperse can be seen in the upper right corner of (a) over the Atlantic Ocean\cite{Astria_Graph}\cite{full_constellation}.}
+
+\label{fig:constellation}
+\end{figure}
+
+As one satellite flies past and another comes into view, the user terminal switches satellites seamlessly using two beams at once: one focused on the old satellite and one at the new. This is possible thanks to the array antenna and digital signal processing of the multiple data streams at baseband frequencies. Another unique feature with a megaconstellation such as Starlink is the communication between neighboring satellites. Since every Starlink satellite is in a chain, they are close enough to each other to transfer information via lasers. With a fully complete constellation, data sent to one satellite will travel along a chain until it reaches the satellite that is connected to a ground station.\footnote{While the first orbital shell is almost complete, Starlink plans to build two more shells that will provide more coverage from a higher ($1200\si{km}$) and lower ($340\si{km}$) orbits.} Since the satellites are much closer than traditional systems, a signal could make over $60$ round trips to Starlink satellites before it made $1$ to a geostationary satellite. The result is a latency of $20$ to $40\si{ms}$ versus $300$ to $600\si{ms}$ for GEO, which is priceless for many people or businesses.
+
+\subsection{Relative Merits of Starlink}
+\label{starlink_merits}
+
+This paper has discussed many benefits of the Starlink megaconstellation. It provides low-latency internet to areas that normal wired connections are not feasible. Especially in areas of turmoil from natural disasters or war, it can provide much needed connectivity, communication, and relief to users in need.\footnote{In the ongoing Russian invasion of Ukraine, Starlink provided crucial internet access as Russian missile strikes target key Ukrainian telecommunications infrastructures. However, there was much controversy when Elon Musk announced Starlink could no longer support Ukraine due to the financial costs\cite{starlink_ukraine}.} 
+Despite the good, there is much controversy surrounding the system. With the proposed Starlink system at $42000$ satellites, the number of total satellites in orbit would be seventeenfold the number of total satellites around Earth before Starlink first launched. This is not even taking into account Starlinks effect on inspiring competitors that will soon add thousands more themselves. More satellites will only amplify two megaconstellation problems: space debris and astronomical research. As more satellites clog up LEO, it becomes easier for a failed or dead satellite to collide with active satellites. This could cause the Kessler syndrome, which is when the density of satellites in LEO is high enough for a collision to cause space debris that creates a cascade of more collisions, until there is just a ring of space debris. It is also very difficult to deal with space debris since they can come in all sizes and orbit quite fast in LEO. With more and more satellites in orbit, there will be less and less room for error. The other issue of astronomical research is very frustrating for astronomers. What seems like a chain of moving stars spanning across the sky is fascinating to many. However, it is not interesting to those who are taking time-sensitive stellar measurements, some of which we only get a handful of chances to measure. The satellites ruin luminosity data due to their brightness and size, despite attempts to adjust their design.
+
+Despite these concerns, the Starlink system is nonetheless an incredible feat of engineering. Once complete, the system will be able to provide very fast and consistent internet. There is much talk of Starlink becoming the fastest medium of internet flow, potentially beating out the mighty fiber optic cable. This is thought to be possible since communication amongst Starlink satellite happens in a near-vacuum, while fiber optic occurs in a medium, which slows it down by $31\%$. The signal path using satellites may also be shorter, as it could travel between satellites almost directly to its destination rather than being restricted to the current fiber optic pathways around the globe. Even with its amazing technology thus far, it will be awesome to see how much more the Starlink system can improve and deal with current or future environmental concerns.
+
+\newpage
+\appendix
+
+\section{Appendix}
+
+\subsection{Coordinates}
+\label{appen_coord}
+
+When considering electromagnetic waves, it is easiest to use the spherical polar coordinate system, where $r$ is the radial distance from the origin, $\theta$ is the zenith angle (in the z-direction from $0$ to $\pi$), and $\phi$ is the azimuth angle (in the x-y plane from $0$ to $2\pi$) as seen in Fig. \ref{fig:sphere_polar_coord}. However, occasionally Cartesian coordinates will be used in conjunction with polar. For instance, when describing direction, something might be along the xyz-axis ($\hat{x}$, $\hat{y}$, or $\hat{z}$) with Cartesian, or the $\phi$-axis ($\hat{\phi}$) and the $\theta$-axis ($\hat{\theta}$) for polar and waves in general.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=3.0 in]{figures/3D_Spherical.png}
+\caption{A diagram of spherical polar coordinates. The radial distance from the origin is $r$, $\theta$ is the zenith angle (in the z-direction from 0 to $\pi$), and $\phi$ is the azimuth angle (in the x-y plane from 0 to $2\pi$).}
+\label{fig:sphere_polar_coord}
+\end{figure}
+
+
+\subsection{Signal Attenuation through Atmosphere}
+\label{appen_atmos_atten}
+
+There are many elements or compounds in Earth's atmosphere that are very happy to absorb certain frequencies of electromagnetic waves that will excite the molecule. As discussed in Section \ref{band}, higher frequencies are less common for telecommunication in the atmosphere. As seen in Fig. \ref{fig:atmos_atten}, the signals are more easily absorbed and so we find the general trend that as frequency increases, so does signal attenuation.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=3.0 in]{figures/atmos_absorb.png}
+\caption{A graphic of signal frequency versus its zenith absorption (attenuation) at sea-level. The dashed line displays zenith attenuation for dry air, while the solid line is for an atmosphere with $7.5\si{g/m^3}$ surface water vapor density. The higher the absorption, the less signal is reaching an observer along the LoS from the satellite. The peaks in absorption correspond to frequencies that are readily absorbed by molecules commonly found in Earth's atmosphere, such as oxygen at $57\si{GHz}$ and water vapor at $22\si{GHz}$\cite{atmos_atten}\cite{richharia_westbrook_2010}.}
+\label{fig:atmos_atten}
+\end{figure}
+
+\subsection{Gauge Transformation}
+\label{appen_gauges}
+
+A gauge transformation is a mathematical transformation that can be made to the electromagnetic potential without changing the underlying physical electric and magnetic fields. In other words, different choices of potential can give rise to the same physical fields and simplify the equations to make them more tractable.
+
+The most common type of gauge transformation is the Coulomb gauge transformation, which satisfies the gauge fixing condition $\nabla \cdot \vec{A} = 0$. This condition simplifies the equations of motion for the electric and magnetic fields and makes them easier to solve "semi-classical" calculations in quantum mechanics.
+
+The Lorenz gauge is another specific choice of gauge for the electromagnetic potential in Eq. \ref{eq:lorenz_gauge} as we saw in Section \ref{derive_efield}. This gauge condition is particularly useful in electromagnetism because it simplifies the equations of motion for the electromagnetic fields, making them more amenable to analysis. In particular, it leads to wave equations for the fields that are easily solvable and have a clear physical interpretation.
+
+The Lorenz gauge is also important because it is a gauge condition that is invariant under Lorentz transformations, which are the transformations that relate measurements made by observers in different inertial reference frames. This means that the Lorenz gauge is a natural choice for describing the electromagnetic potential in a relativistic context. \footnote{The Lorenz gauge has important connections to quantum electrodynamics (QED), which is the theory of the interaction between light and matter. In QED, the Lorenz gauge plays a crucial role in the Feynman gauge, which is a specific choice of gauge used in perturbative calculations of quantum mechanical scattering amplitudes. The Feynman gauge is also an example of a gauge condition that is both Lorentz-invariant and preserves the locality of the theory, which is an important property of a physical theory.}
+
+\subsection{Keplerian Orbits}
+\label{appen_orbit}
+
+At their fundamentals, an Earth orbit is when an object falls towards Earth, but its horizontal speed fast enough so that it continuously falls around Earth, without falling all the way in. In the 17th century, German astronomer Johannes Kepler declared three laws of planetary motion. These laws stated that
+
+\begin{enumerate}
+    \item All planets move in elliptical orbits, with the Sun at one focus as seen in Fig. \ref{fig:ellipse}
+    \label{first law}
+    \item A line that connects a planet to the sun sweeps out equal areas in equal times
+    \label{second law}
+    \item The square of the period of any planet is proportional to the cube of the semimajor axis of its orbit (as we derive for a circular orbit in Eq. \ref{eq:period})
+    \label{third law}
+\end{enumerate}
+
+The elliptical shape of orbits is a result from the inverse square force of gravity. As seen in Fig. \ref{fig:ellipse}, a satellite orbits around an object at one of two foci $F$ with the empty focus $F'$. The closest point to $F$ is the perigee, while the farthest is the apogee. The orbit is also defined by its semi-major axis $a$, semi-minor axis $b$, eccentricity $e$, and angle $\theta$. For man-made satellites we care about bound orbits, when $0 \leq e \leq 1$. A particular case of bound orbits is the circular orbit, which is a bound orbit when the eccentricity is given by $e=0$ and the radius is $a=r=r'$. The conditions for perfectly circular orbits require that Earth be a perfect sphere, totally spherically symmetric, and the only gravitational force acting upon the satellite. The satellite must exist in a perfect vacuum while also entering its orbit with the exact velocity required at that height. These conditions are impossible and therefore a satellite can never achieve a perfectly circular orbit. Since most telecommunication orbits are nearly circular, we can approximate them as such and calculate important characteristics of their revolutions around Earth. 
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=3.0 in]{figures/ellipse.png}
+\caption{A diagram of an elliptical orbit. It is defined by its two foci $F$ and $F'$, with the Earth at one and a distance of $2a*e$ between them, where $e$ is the eccentricity, $a$ is the length of the semi-major axis, and $b$ is the length of the semi-minor axis. The distance from the satellite to the foci are $r$ and $r'$, with the angle $\theta$ between the semi-major axis and $r$.}
+\label{fig:ellipse}
+\end{figure}
+
+\subsection{Orbital Decay}
+\label{appen_decay}
+
+Orbital decay is when outside forces act upon an orbiting satellite in a manner that slows its orbital velocity. In doing so, these forces cause the satellite to lose altitude. When ignored, these forces can slowly bring a satellite back down to Earth. There can be many mechanisms that cause orbital decay including outside gravitational forces, atmospheric drag, tidal forces, light and thermal radiation, and more. When satellites occupy LEO, they encounter significant amounts of the atmosphere. These particles collide with the satellites, causing an atmospheric drag force acting against the trajectory of the satellites. This drag force $F_D$ can be modeled with traditional aerodynamics as
+\begin{equation}
+    F_D = \frac{1}{2}\rho(h) C_D v^2 A,
+\end{equation}
+where $\rho(h)$ is the atmospheric density dependant on altitude, $C_D$ is the drag coefficient for the satellite, $v$ is the speed of the satellite with respect to the atmosphere, and $A$ is the area of the satellite normal to the direction of $v$\cite{drag_numerical}. For most compact satellites in LEO, $C_D$ is considered to be around $2.2$\cite{drag_LEO}\cite{drag_thesis}. However, long cylindrical satellites can have a coefficient of around $3.5$\cite{satellite_drag}. Although small, drag slows satellite orbits enough to require occasional thruster boosts to maintain orbit. Failure to do so results in loss of altitude and eventually atmospheric re-entry as seen for the first Chinese space station in Fig. \ref{fig:tiangong_decay}. When the Sun is quiet, satellites in LEO have to boost their orbits about four times per year to make up for atmospheric drag. When solar activity is at its greatest over the 11-year solar cycle, satellites may only have to be maneuvered every 2-3 weeks to maintain their orbit. Given the specifications of a satellite, solar activity, and the atmospheric density at the orbital altitudes, a model can be constructed to calculate the force of drag and enable thruster boosts accordingly to keep satellites in orbit\cite{STORZ20052497}\cite{Low_Chia_2018}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=3.0 in]{figures/Altitude_of_Tiangong-1.png}
+\caption{The orbital decay of the first Chinese Space Station Tiangong. Over the span of a year, the station descended in altitude in what was criticized as an uncontrolled atmospheric re-entry. The station met its end on April $1$ when it burned up over the southern Pacific Ocean.\cite{tiangong}.}
+\label{fig:tiangong_decay}
+\end{figure}
+
+\subsection{More Attitude Methods}
+\label{appen_attitude}
+
+ GPS makes use of a constellation of navigation satellites that are in semi-synchronous orbit, encircling the Earth twice a day. To determine the location and time of our internet satellite, it communicates via radio waves with at least four of the navigation satellites, which know where they are, to determine the distances between these satellites and our satellite. Then, using trilateration, our satellite is able to calculate its location, using time information in the signals to correct for any errors due to latency. INS utilizes onboard instruments such as accelerometers and gyroscopes to measure the acceleration and rotation of our satellite while it orbits Earth. By integrating these techniques over time, we can calculate the position and velocity of our satellite as it orbits. A star tracker uses a camera to match the stars it sees with a pre-stored catalog of known stars. By identifying matches, our satellite can determine its orientation in space. In the DOR (Delta-DOR) method, a satellite measures the relative position of two ground stations by measuring the time delay of the signals it receives from each station. Finally, laser ranging is when satellites beam laser pulses at each other or at ground stations and measure the time it takes for the pulse to travel their and back. This allows the satellite to measure its distance from other satellites and ground stations.\footnote{These methods, along with other sensors aboard the satellite and receiving debris data from Earth, also allow satellites to avoid collisions with other orbiting objects or debris.}
+
+%--BIBLIOGRAPHY--%
+\newpage
+\raggedright
+\bibliographystyle{aip}
+\bibliography{refs}
+
+
+\end{document}
